@@ -78,6 +78,18 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+createUsernames(accounts);
+console.log(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -161,7 +173,7 @@ movements.forEach(function (mov, i, arr) {
 });
 
 //(mov, i, arr) 1st current element then index then array
-//you can break out of a FOREACH loop using continue or break you would have to use FOROF
+//you can't break out of a FOREACH loop using continue or break you would have to use FOROF
 */
 /*
 // FOREACH WITH MAPS AND SETS
@@ -226,3 +238,52 @@ const checkDogs = allDogs.forEach(function (dog, i) {
     : console.log(`Dog number ${i + 1} is an adult, and is ${dog} years old`);
 });
 */
+
+// DATA TRASNFORMATIONS: MAP, FILTER, REDUCE
+// map returns a new array containing the results of applying an operation on all original array elements.
+//filter returns a new array containing the array elements that passed a specified test condition.
+//reduce boils all array elements down to one single value (e.g. add all elements together)
+
+////////// MAP METHOD //////////
+/*
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const eurToUsd = 1.1;
+const movementsUSD = movements.map(function (mov) {
+  return mov * eurToUsd;
+});
+//const movementsUSD = movements.map(mov => mov * eurToUsd); same as above but with arrow functions
+console.log(movements);
+console.log(movementsUSD);
+
+const movementsDescriptions = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
+      mov
+    )}`
+);
+console.log(movementsDescriptions);
+*/
+
+///////// FILTERS //////
+/*
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+
+console.log(deposits);
+
+const withdrawals = movements.filter(mov => mov < 0);
+
+console.log(withdrawals);
+*/
+
+//////// REDUCE ////////
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//acc is the accumulator. 0 is the initial value of the accumulator.
+const balance = movements.reduce(function (acc, cur, i, arr) {
+  return acc + cur;
+}, 0);
+console.log(balance);
