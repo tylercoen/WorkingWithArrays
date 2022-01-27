@@ -61,9 +61,11 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements; //create a copy of the array
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = ` 
     <div class="movements__row">
@@ -197,6 +199,12 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = 0;
   }
   inputCloseUsername.value = inputClosePin.value = '';
+});
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted); //opposite of sorted
+  sorted = !sorted;
 });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -493,6 +501,7 @@ const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 console.log(account);
 */
 
+/*
 ///////////// SOME and EVERY //////////////
 console.log(movements);
 //Includes returns true if -130 is anywhere in the array
@@ -546,10 +555,106 @@ console.log(owners.sort()); //mutates original array
 // Numbers
 console.log(movements);
 console.log(movements.sort()); //will not sort correctly it only looks at the first number
-// return < 0 a,b
-//return > 0 b,a
-movements.sort((a, b) => {
+// return < 0 a,b (keep order)
+//return > 0 b,a (switch order)
+//ascending
+/*movements.sort((a, b) => {
   if (a > b) return 1;
-  if (b > a) return -1;
+  if (a < b) return -1;
 });
+movements.sort((a, b) => a - b); //sames as above
 console.log(movements);
+//descending
+/*
+movements.sort((a, b) => {
+  if (a > b) return -1;
+  if (a < b) return 1;
+});
+movements.sort((a, b) => b - a);
+console.log(movements);
+*/
+/*
+/////////////// FILLING ARRAYS ////////////
+//this is the way we usually do it using data we know.
+const arr = [1, 2, 3, 4, 5, 6, 7];
+console.log(new Array(1, 2, 3, 4, 5, 6, 7));
+
+//////// empty arrays plus fill
+const x = new Array(7); //creates an empty array with 7 spots
+console.log(x);
+//console.log(x.map(() => 5)); this doesn't actually do anything
+//x.fill(1); mutates the array and fills it with 1s.
+x.fill(1, 3, 5); //starts at index 3 and fills the array with 1s but stops before hitting index 5
+console.log(x);
+arr.fill(23, 4, 6);
+console.log(arr); //mutates the original array and adds 23s from 4-6
+
+//////// Array.from
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+const z = Array.from({ length: 7 }, (cur, i) => i + 1);
+console.log(z);
+/*
+const randomDice = Array.from({ length: 100 }, () =>
+  Math.trunc(Math.random() * 10)
+);
+console.log(randomDice);
+*/
+
+/*
+const movementsUI = Array.from(document.querySelectorAll('.movements__value'));
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+
+  console.log(movementsUI);
+});
+//// Array Methods Practice
+// 1. show deposits
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((sum, cur) => sum + cur, 0);
+
+console.log(bankDepositSum);
+
+// 2. how many deposits over 1000
+const numDeposits1000 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((count, cur) => (cur >= 1000 ? ++count : count), 0); //0 is the counter that gets added to ++adds 1
+
+console.log(numDeposits1000);
+
+// 3. creating a brand new object using reduce
+const sums = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      sums[cur > 0 ? 'deposits' : 'withdrawals'] += cur;
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+console.log(sums);
+
+// 4. str to title case
+// this is a nice title -> This Is a Nice Title
+
+const convertTitleCase = function (title) {
+  const capitalize = str => str[0].toUpperCase() + str.slice(1);
+  const exceptions = ['a', 'an', 'the', 'but', 'or', 'on', 'in', 'with', 'and'];
+  const titleCase = title
+    .toLowerCase()
+    .split(' ')
+    .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(' ');
+  return capitalize(titleCase);
+};
+console.log(convertTitleCase('this is a nice title'));
+console.log(convertTitleCase('this is a LONG title but not too long'));
+console.log(convertTitleCase('and here is another title with an EXAMPLE'));
+*/
