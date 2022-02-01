@@ -756,12 +756,6 @@ dogs.forEach(obj => {
 });
 /*
 6. Log to the console whether there is any dog eating an okay amount of food (just true or false)*/
-dogs.forEach(obj => {
-  console.log(
-    obj.curFood > obj.recommendedFood * 0.9 &&
-      obj.curFood < obj.recommendedFood * 1.1
-  );
-});
 
 /*
 7. Create an array containing the dogs that are eating an okay amount of food (try to reuse the condition used in 6.)*/
@@ -775,9 +769,7 @@ console.log(eatsEnough);
 /*8. Create a shallow copy of the 'dogs' array and sort it by recommended food
 portion in an ascending order (keep in mind that the portions are inside the
 array's objects 😉)*/
-const newArr = [...dogs];
-console.log(newArr.recommendedFood);
-newArr = newArr.sort(function (a, b) {
-  return a.recommendedFood.localeCompare(b.recommendedFood);
-});
-console.log(newArr);
+const dogsCopy = dogs
+  .slice()
+  .sort((a, b) => a.recommendedFood - b.recommendedFood);
+console.log(dogsCopy);
